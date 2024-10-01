@@ -1,0 +1,125 @@
+ <!--
+ A FAIRE
+
+fenêtre connexion
+fenêtre register
+boutton enregistrer l'image
+choisire le format dans le toolbar
+choisire si on veut etirer l'image ou non ? ( on ajoutera donc des cases vides dans la table )
+-->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>importation et generation d'image</title>
+    
+</head>
+<body>
+
+    <div id="toolbar">
+        <div>
+            <h3>Barre d'outils</h3>
+            <div class="parameter">
+                <label for="param1">Paramètre 1 :</label>
+                <input type="number" id="param1" min="0" max="100" value="0" oninput="document.getElementById('range1').value=this.value;">
+                <input type="range" id="range1" min="0" max="100" value="0" oninput="document.getElementById('param1').value=this.value;">
+            </div>
+            <div class="parameter">
+                <label for="param2">Paramètre 2 :</label>
+                <input type="number" id="param2" min="0" max="100" value="0" oninput="document.getElementById('range2').value=this.value;">
+                <input type="range" id="range2" min="0" max="100" value="0" oninput="document.getElementById('param2').value=this.value;">
+            </div>
+        </div>
+
+        <div class="tb_buttons">
+            <button id="reset">Reset</button>
+            <button id="start">Start</button>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <div id="image-container"></div>
+        <button id="insert" onclick="document.getElementById('fileInput').click()">Insérer une image</button>
+        <input type="file" id="fileInput" accept="image/*" onchange="loadImage(event)">
+        <button id="save" >Save</button>
+    </div>
+
+    <div class="modal-save" id="saveModal">
+        <div class="modal-SC">
+
+            <h2>Informations de l'image</h2>
+            <input type="text" id="title" placeholder="Titre">
+            <textarea id="description" placeholder="Description"></textarea>
+            <textarea id="tags" placeholder="Tags"></textarea>
+            
+            <div class="modal-buttons">
+                <button id="cancel">Retour</button>
+                <button id="accept">Accepter</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const saveButton = document.getElementById('save');
+        const modal = document.getElementById('saveModal');
+        const cancelButton = document.getElementById('cancel');
+
+        // insertion d'image.
+
+        function loadImage(event) {
+            const imageContainer = document.getElementById('image-container');
+            imageContainer.innerHTML = ''; // suppr image si y'en a déjà une
+            const file = event.target.files[0];
+            if (file) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                imageContainer.appendChild(img);
+            }
+        }
+
+        // Boutton reset, bah ça reset les paramètres quoi
+        document.getElementById('reset').addEventListener('click', () => {
+            document.getElementById('param1').value = 0;
+            document.getElementById('range1').value = 0;
+            document.getElementById('param2').value = 0;
+            document.getElementById('range2').value = 0;
+        });
+
+
+        // Remet les input à 100 si ils dépassent 100
+
+        document.getElementById('param1').addEventListener('input', function() {
+        if (this.value > 100) {
+            this.value = 100;
+            }
+         });
+
+        document.getElementById('param2').addEventListener('input', function() {
+            if (this.value > 100) {
+                this.value = 100;
+            }
+         });
+
+
+        saveButton.addEventListener('click', function() {
+        modal.style.display = 'flex';
+         });
+
+        cancelButton.addEventListener('click', function() {
+        modal.style.display = 'none';
+         });
+
+    // ferme la fenêtre si on click en dehors ( garder ? chiant non ?¯\_(ツ)_/¯ )
+         window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+         }};
+         
+
+    </script>
+
+</body>
+</html>
